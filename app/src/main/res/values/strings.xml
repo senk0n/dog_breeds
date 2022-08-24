@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Dog Breeds</string>
+
+    // Bottom navigation
+    <string name="breeds_tab">Breeds</string>
+    <string name="favorites_tab">Favorites</string>
+    <string name="breed_photos_tab">Breed Photos</string>
+
+    // Error container
+    <string name="error_occurred">Error occurred</string>
+    <string name="empty_result">Empty result</string>
+    <string name="try_again_later">Try again later.</string>
+    <string name="try_again">Try again</string>
+</resources>
