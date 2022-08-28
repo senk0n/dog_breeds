@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import dev.senk0n.dogbreeds.databinding.FragmentFavoriteBinding
 import dev.senk0n.dogbreeds.application.favorites.placeholder.PlaceholderContent.PlaceholderItem
+import dev.senk0n.dogbreeds.databinding.FragmentFavoriteBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -16,15 +16,11 @@ class FavoriteAdapter(
 ) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         return ViewHolder(
             FragmentFavoriteBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
