@@ -8,7 +8,8 @@ import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoriteUrlTuple
 import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoritesEntity
 
 @Dao
-interface FavoritesDataSource {
+interface FavoritesSource {
+
     @Query("SELECT * FROM favorites WHERE breed = :breed")
     suspend fun getByBreed(breed: String): List<FavoritesEntity>
 
@@ -20,4 +21,7 @@ interface FavoritesDataSource {
 
     @Delete(entity = FavoritesEntity::class)
     suspend fun removeByUrl(favoriteUrlTuple: FavoriteUrlTuple)
+
+    @Query("SELECT EXISTS(SELECT * FROM favorites WHERE photo_url = :photoUrl)")
+    suspend fun isExistsByUrl(photoUrl: String): Boolean
 }

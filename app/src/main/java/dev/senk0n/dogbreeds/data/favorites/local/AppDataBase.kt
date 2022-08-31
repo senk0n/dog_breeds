@@ -11,6 +11,6 @@ import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoritesEntity
     ]
 )
 abstract class AppDataBase : RoomDatabase() {
-    abstract fun getFavoritesDao(): FavoritesDataSource
+    abstract fun getFavoritesDao(): FavoritesSource
 
 }

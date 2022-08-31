@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.application.favorites.placeholder.PlaceholderContent
 
+@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
 
     private var columnCount = 3

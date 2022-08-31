@@ -2,15 +2,24 @@ package dev.senk0n.dogbreeds.application.breed_photos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.Lazy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.senk0n.dogbreeds.application.MutableLiveResult
 import dev.senk0n.dogbreeds.application.MutableLiveSnack
 import dev.senk0n.dogbreeds.application.Snack
 import dev.senk0n.dogbreeds.application.public
+import dev.senk0n.dogbreeds.domain.breed_photos.shared.BreedPhotosUseCase
+import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BreedPhotoViewModel : ViewModel() {
+@HiltViewModel
+class BreedPhotoViewModel @Inject constructor(
+    private val breedPhotosUseCase: BreedPhotosUseCase,
+    private val editFavoritesUseCase: EditFavoritesUseCase,
+) : ViewModel() {
 
     private val _breedPhotos = MutableLiveResult<List<BreedListItem>>()
     val breedPhotos = _breedPhotos.public()

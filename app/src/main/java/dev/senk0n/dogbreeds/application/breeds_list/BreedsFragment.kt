@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.application.breed_photos.BreedPhotoFragment.Companion.ARG_BREED
 import dev.senk0n.dogbreeds.application.breed_photos.BreedPhotoFragment.Companion.ARG_SUB_BREED
@@ -17,6 +18,7 @@ import dev.senk0n.dogbreeds.databinding.FragmentBreedsListBinding
 import dev.senk0n.dogbreeds.databinding.PartErrorBinding
 import dev.senk0n.dogbreeds.shared.core.*
 
+@AndroidEntryPoint
 class BreedsFragment : Fragment() {
     private var _binding: FragmentBreedsListBinding? = null
     private val binding get() = _binding!!

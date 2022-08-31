@@ -1,29 +1,36 @@
 package dev.senk0n.dogbreeds.data.favorites
 
-import dev.senk0n.dogbreeds.data.favorites.local.FavoritesDataSource
+import dev.senk0n.dogbreeds.data.favorites.local.FavoritesSource
 import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoriteUrlTuple
 import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoritesEntity
 import dev.senk0n.dogbreeds.data.favorites.shared.FavoritesRepository
 import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FavoriteRepoImpl(
-    private val favoritesDataSource: FavoritesDataSource,
+@Singleton
+class FavoritesRepoImpl @Inject constructor(
+    private val favoritesSource: FavoritesSource,
 ) : FavoritesRepository {
     override suspend fun loadFavoritesByBreed(breed: Breed): List<BreedPhoto> =
         if (breed.subBreed == null) {
-            favoritesDataSource.getByBreed(breed.name)
+            favoritesSource.getByBreed(breed.name)
         } else {
-            favoritesDataSource.getBySubBreed(breed.name, breed.subBreed)
+            favoritesSource.getBySubBreed(breed.name, breed.subBreed)
         }.map { it.toBreedPhoto() }
 
     override suspend fun addFavorite(breedPhoto: BreedPhoto) {
-        favoritesDataSource.create(
+        favoritesSource.create(
             FavoritesEntity.fromBreedPhoto(breedPhoto)
         )
     }
 
     override suspend fun removeFavorite(breedPhoto: BreedPhoto) {
-        favoritesDataSource.removeByUrl(FavoriteUrlTuple(breedPhoto.photoUrl))
+        favoritesSource.removeByUrl(FavoriteUrlTuple(breedPhoto.photoUrl))
     }
+
+    override suspend fun isFavorite(breedPhoto: BreedPhoto): Boolean =
+        favoritesSource.isExistsByUrl(breedPhoto.photoUrl)
+
 }

@@ -8,12 +8,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.application.showSnack
 import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoListBinding
 import dev.senk0n.dogbreeds.databinding.PartErrorBinding
 import dev.senk0n.dogbreeds.shared.core.*
 
+@AndroidEntryPoint
 class BreedPhotoFragment : Fragment() {
     private var _binding: FragmentBreedPhotoListBinding? = null
     private val binding get() = _binding!!
