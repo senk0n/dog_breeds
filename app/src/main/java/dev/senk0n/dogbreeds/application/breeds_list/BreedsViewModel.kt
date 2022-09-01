@@ -9,9 +9,7 @@ import dev.senk0n.dogbreeds.application.public
 import dev.senk0n.dogbreeds.domain.breeds.shared.BreedsUseCase
 import dev.senk0n.dogbreeds.shared.core.*
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,10 +31,7 @@ class BreedsViewModel @Inject constructor(
         }) {
             _breeds.value = Pending
 
-            var list: List<Breed>
-            withContext(Dispatchers.Default) {
-                list = breedsUseCase.getBreeds()
-            }
+            val list = breedsUseCase.getBreeds()
 
             if (list.isEmpty()) _breeds.value = Empty
             _breeds.value = Success(list)

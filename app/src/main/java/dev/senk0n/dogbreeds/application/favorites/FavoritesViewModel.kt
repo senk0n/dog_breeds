@@ -11,9 +11,7 @@ import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,20 +52,16 @@ class FavoritesViewModel @Inject constructor(
         _breedsOfFavorites.value = favoritesUseCase.getBreedsOfFavorites()
     }
 
-
     private fun loadFavorites(breed: Breed?) =
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
             _favorites.value = Error(throwable)
         }) {
             _favorites.value = Pending
 
-            var list: List<BreedPhoto>
-            withContext(Dispatchers.Default) {
-                list = if (breed == null) {
-                    favoritesUseCase.getFavorites()
-                } else {
-                    favoritesUseCase.getFavoritesByBreed(breed)
-                }
+            val list = if (breed == null) {
+                favoritesUseCase.getFavorites()
+            } else {
+                favoritesUseCase.getFavoritesByBreed(breed)
             }
 
             if (list.isEmpty()) _favorites.value = Empty

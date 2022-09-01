@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
-import coil.transform.RoundedCornersTransformation
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoBinding
 import dev.senk0n.dogbreeds.shared.core.BreedListItem
