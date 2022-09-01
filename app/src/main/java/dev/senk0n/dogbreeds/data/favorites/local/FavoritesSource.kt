@@ -10,6 +10,9 @@ import dev.senk0n.dogbreeds.data.favorites.local.entities.FavoritesEntity
 @Dao
 interface FavoritesSource {
 
+    @Query("SELECT * FROM favorites")
+    suspend fun getFavorites(): List<FavoritesEntity>
+
     @Query("SELECT * FROM favorites WHERE breed = :breed")
     suspend fun getByBreed(breed: String): List<FavoritesEntity>
 

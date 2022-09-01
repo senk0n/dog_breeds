@@ -2,22 +2,24 @@ package dev.senk0n.dogbreeds.application.breed_photos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.senk0n.dogbreeds.application.MutableLiveResult
 import dev.senk0n.dogbreeds.application.MutableLiveSnack
-import dev.senk0n.dogbreeds.application.Snack
 import dev.senk0n.dogbreeds.application.public
 import dev.senk0n.dogbreeds.domain.breed_photos.shared.BreedPhotosUseCase
 import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
+import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class BreedPhotoViewModel @Inject constructor(
     private val breedPhotosUseCase: BreedPhotosUseCase,
+    private val favoritesUseCase: FavoritesUseCase,
     private val editFavoritesUseCase: EditFavoritesUseCase,
 ) : ViewModel() {
 
@@ -40,55 +42,29 @@ class BreedPhotoViewModel @Inject constructor(
         } else _breedPhotos.value = Empty
     }
 
-    fun toggleBreedFavorite(photoUrl: String) {
-
+    fun toggleBreedFavorite(breedPhoto: BreedPhoto) = viewModelScope.launch {
+        editFavoritesUseCase.toggleFavorite(breedPhoto)
+//        refresh()
     }
 
-    private fun loadPhotos(breed: Breed) {
-
-        viewModelScope.launch {
-            if (breed.name.isBlank()) _breedPhotos.value = Empty
+    private fun loadPhotos(breed: Breed) =
+        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            _breedPhotos.value = Error(throwable)
+        }) {
             _breedPhotos.value = Pending
+            if (breed.name.isBlank()) _breedPhotos.value = Empty
 
-            val b1 = BreedListItem(
-                BreedPhoto(
-                    Breed("hound", "afghan"),
-                    "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg"
-                ), true
-            )
-            val b12 = BreedListItem(
-                BreedPhoto(
-                    Breed("hound", "afghan"),
-                    "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg"
-                ), false
-            )
-            val b2 = BreedListItem(
-                BreedPhoto(
-                    Breed("bulldog", "boston"),
-                    "https://images.dog.ceo/breeds/bulldog-boston/n02096585_11427.jpg"
-                ), false
-            )
-            val b22 = BreedListItem(
-                BreedPhoto(
-                    Breed("bulldog", "boston"),
-                    "https://images.dog.ceo/breeds/bulldog-boston/n02096585_11427.jpg"
-                ), true
-            )
+            var list: List<BreedPhoto>
+            var favorites: List<BreedPhoto>
+            withContext(Dispatchers.Default) {
+                list = breedPhotosUseCase.loadPhotos(breed)
+                favorites = favoritesUseCase.getFavoritesByBreed(breed)
+            }
 
-            delay(500)
-            _breedPhotos.value = Success(listOf(b1, b2))
-
-            delay(250)
-            _snack.value = Event(Snack("No Internet connection!", "GO", {}))
-
-            delay(1500)
-            _breedPhotos.value = Success(listOf(b1, b22, b2, b12))
-
-//            delay(2500)
-//            _breedPhotos.value = Error(Throwable("No Internet connection!"))
-//
-//            delay(1500)
-//            _breedPhotos.value = Empty
+            if (list.isEmpty()) _breedPhotos.value = Empty
+            _breedPhotos.value = Success(list.map {
+                BreedListItem(it, favorites.contains(it))
+            })
         }
-    }
+
 }

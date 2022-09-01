@@ -10,15 +10,18 @@
         android:id="@+id/sub_breed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginVertical="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
+        android:visibility="visible"
         tools:text="golden" />
 
     <TextView
         android:id="@+id/breed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginVertical="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         tools:text="retriever" />
 </LinearLayout>

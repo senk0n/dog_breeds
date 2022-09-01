@@ -5,7 +5,6 @@ import dev.senk0n.dogbreeds.data.breeds.cloud.BreedsSource
 import dev.senk0n.dogbreeds.data.breeds.shared.BreedsRepository
 import dev.senk0n.dogbreeds.data.http_client.shared.HttpCallWrapper
 import dev.senk0n.dogbreeds.shared.core.Breed
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 

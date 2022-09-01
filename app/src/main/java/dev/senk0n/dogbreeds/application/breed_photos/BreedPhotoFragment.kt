@@ -22,7 +22,7 @@ class BreedPhotoFragment : Fragment() {
     private var _errorBinding: PartErrorBinding? = null
     private val errorBinding get() = _errorBinding!!
     private val viewModel: BreedPhotoViewModel by viewModels()
-    private val adapter: BreedPhotoAdapter = BreedPhotoAdapter(::toggleBreedFavorite)
+    private val adapter: BreedPhotoAdapter = BreedPhotoAdapter(false, ::toggleBreedFavorite)
 
     companion object {
         const val ARG_BREED = "BREED"
@@ -42,8 +42,9 @@ class BreedPhotoFragment : Fragment() {
 
         arguments?.let {
             val breed = it.getString(ARG_BREED)
-            val subBreed = it.getString(ARG_SUB_BREED)
+            var subBreed = it.getString(ARG_SUB_BREED)
             if (breed != null) {
+                if (subBreed?.isEmpty() == true) subBreed = null
                 viewModel.setBreed(Breed(breed, subBreed))
             } else viewModel.refresh()
         }
@@ -94,8 +95,9 @@ class BreedPhotoFragment : Fragment() {
         return binding.root
     }
 
-    private fun toggleBreedFavorite(photoUrl: String) =
-        viewModel.toggleBreedFavorite(photoUrl)
+    private fun toggleBreedFavorite(breedPhoto: BreedPhoto) {
+        viewModel.toggleBreedFavorite(breedPhoto)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -8,8 +8,12 @@ data class BreedsResponse(
 ) {
     fun toBreeds(): List<Breed> = message.flatMap { (breed, subBreeds) ->
         buildList {
-            subBreeds.forEach { subBreed ->
-                Breed(breed, subBreed)
+            if (subBreeds.isEmpty()) {
+                add(Breed(breed))
+            } else {
+                subBreeds.forEach { subBreed ->
+                    add(Breed(breed, subBreed))
+                }
             }
         }
     }

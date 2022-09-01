@@ -10,9 +10,11 @@ import coil.size.Scale
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoBinding
 import dev.senk0n.dogbreeds.shared.core.BreedListItem
+import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
 class BreedPhotoAdapter(
-    private val onClick: (breed: String) -> Unit,
+    private val isFavorites: Boolean,
+    private val onClick: (breedPhoto: BreedPhoto) -> Unit,
 ) : RecyclerView.Adapter<BreedPhotoAdapter.ViewHolder>() {
     var list: List<BreedListItem> = emptyList()
         set(value) {
@@ -43,11 +45,17 @@ class BreedPhotoAdapter(
         val itemPhotoUrl = item.breedPhoto.photoUrl
 
         with(holder.binding) {
-            breed.text = item.breedPhoto.breed.name
-            subBreed.text = item.breedPhoto.breed.subBreed ?: ""
+            if (isFavorites) {
+                breed.text = item.breedPhoto.breed.name
+                subBreed.text = item.breedPhoto.breed.subBreed ?: ""
+            } else {
+                breed.visibility = View.GONE
+                subBreed.visibility = View.GONE
+            }
 
-            if (item.isFavorite) favoriteMark.visibility = View.VISIBLE
-            else favoriteMark.visibility = View.GONE
+            if (item.isFavorite && !isFavorites) {
+                favoriteMark.visibility = View.VISIBLE
+            } else favoriteMark.visibility = View.GONE
 
             breedImage.load(itemPhotoUrl) {
                 crossfade(true)
@@ -56,7 +64,13 @@ class BreedPhotoAdapter(
                 scale(Scale.FILL)
             }
 
-            root.setOnClickListener { onClick(itemPhotoUrl) }
+            root.setOnClickListener {
+                if (!item.isFavorite && !isFavorites) {
+                    favoriteMark.visibility = View.VISIBLE
+                } else favoriteMark.visibility = View.GONE
+
+                onClick(item.breedPhoto)
+            }
         }
     }
 

@@ -1,11 +1,12 @@
 package dev.senk0n.dogbreeds.application.breeds_list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.databinding.FragmentBreedsBinding
+import dev.senk0n.dogbreeds.shared.core.Breed
 
 class BreedsAdapter(
     private val onClick: (breed: Breed) -> Unit,
@@ -39,6 +40,11 @@ class BreedsAdapter(
         with(holder.binding) {
             breed.text = breedItem.name
             subBreed.text = breedItem.subBreed
+            if (breedItem.subBreed != null) {
+                subBreed.visibility = View.VISIBLE
+            } else {
+                subBreed.visibility = View.GONE
+            }
 
             root.setOnClickListener { onClick(Breed(breedItem.name, breedItem.subBreed)) }
         }

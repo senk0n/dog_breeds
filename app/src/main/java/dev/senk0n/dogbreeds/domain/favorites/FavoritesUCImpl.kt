@@ -1,7 +1,7 @@
-package dev.senk0n.dogbreeds.domain.favorites.shared
+package dev.senk0n.dogbreeds.domain.favorites
 
 import dev.senk0n.dogbreeds.data.favorites.shared.FavoritesRepository
-import dev.senk0n.dogbreeds.domain.favorites.FavoritesUseCase
+import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 import javax.inject.Inject
@@ -11,8 +11,11 @@ import javax.inject.Singleton
 class FavoritesUCImpl @Inject constructor(
     private val favoritesRepository: FavoritesRepository
 ) : FavoritesUseCase {
+    override suspend fun getFavorites(): List<BreedPhoto> {
+        return favoritesRepository.loadFavorites()
+    }
 
-    override suspend fun getFavorites(breed: Breed): List<BreedPhoto> {
+    override suspend fun getFavoritesByBreed(breed: Breed): List<BreedPhoto> {
         return favoritesRepository.loadFavoritesByBreed(breed)
     }
 }

@@ -2,16 +2,23 @@ package dev.senk0n.dogbreeds.application.breeds_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.senk0n.dogbreeds.application.MutableLiveResult
 import dev.senk0n.dogbreeds.application.MutableLiveSnack
-import dev.senk0n.dogbreeds.application.Snack
 import dev.senk0n.dogbreeds.application.public
+import dev.senk0n.dogbreeds.domain.breeds.shared.BreedsUseCase
 import dev.senk0n.dogbreeds.shared.core.*
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class BreedsViewModel : ViewModel() {
-    private val _breeds = MutableLiveResult<List<Breed>>()
+@HiltViewModel
+class BreedsViewModel @Inject constructor(
+    private val breedsUseCase: BreedsUseCase,
+) : ViewModel() {
+    private val _breeds = MutableLiveResult<List<Breed>>(Pending)
     val breeds = _breeds.public()
     private val _snack = MutableLiveSnack()
     val snack = _snack.public()
@@ -21,33 +28,19 @@ class BreedsViewModel : ViewModel() {
     }
 
     fun loadBreeds() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            _breeds.value = Error(throwable)
+        }) {
             _breeds.value = Pending
 
-            delay(1500)
-            _breeds.value = Success(
-                listOf(
-                    Breed("awdawd", "gffff"),
-                    Breed("sagdhf", "mfh"),
-                    Breed("xvvfvdfgd", "mnbvcbcv"),
-                )
-            )
-//            delay(1500)
-//            _snack.value = Event(Snack("No Internet connection!", "GO", {}))
+            var list: List<Breed>
+            withContext(Dispatchers.Default) {
+                list = breedsUseCase.getBreeds()
+            }
 
-            delay(1500)
-            _breeds.value = Success(
-                listOf(
-                    Breed("awdawd", "gffff"),
-                    Breed("xvvfvdfgd", "mnbvcbcv"),
-                )
-            )
-
-            delay(1000)
-            _breeds.value = Empty
-
-            delay(1500)
-            _breeds.value = Error(Throwable("No Internet connection!"))
+            if (list.isEmpty()) _breeds.value = Empty
+            _breeds.value = Success(list)
         }
     }
+
 }

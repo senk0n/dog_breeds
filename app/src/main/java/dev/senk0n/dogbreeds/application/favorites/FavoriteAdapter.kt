@@ -1,44 +1,74 @@
 package dev.senk0n.dogbreeds.application.favorites
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import dev.senk0n.dogbreeds.application.favorites.placeholder.PlaceholderContent.PlaceholderItem
-import dev.senk0n.dogbreeds.databinding.FragmentFavoriteBinding
+import coil.load
+import coil.size.Scale
+import dev.senk0n.dogbreeds.R
+import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoBinding
+import dev.senk0n.dogbreeds.shared.core.BreedListItem
+import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class FavoriteAdapter(
-    private val values: List<PlaceholderItem>
+    private val onClick: (breedPhoto: BreedPhoto) -> Unit,
 ) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
+    var list: List<BreedListItem> = emptyList()
+        set(value) {
+            val diffCallback = object : DiffUtil.Callback() {
+                override fun getOldListSize(): Int = field.size
+                override fun getNewListSize(): Int = value.size
+                override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean =
+                    field[oldItem].breedPhoto.photoUrl == value[newItem].breedPhoto.photoUrl
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean =
+                    field[oldItem] == value[newItem]
+            }
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            field = value
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteAdapter.ViewHolder {
         return ViewHolder(
-            FragmentFavoriteBinding.inflate(
+            FragmentBreedPhotoBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
-    }
+        val item = list[position]
+        val itemPhotoUrl = item.breedPhoto.photoUrl
 
-    override fun getItemCount(): Int = values.size
+        with(holder.binding) {
+            breed.text = item.breedPhoto.breed.name
+            subBreed.text = item.breedPhoto.breed.subBreed ?: ""
 
-    inner class ViewHolder(binding: FragmentFavoriteBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+            if (item.isFavorite) favoriteMark.visibility = View.VISIBLE
+            else favoriteMark.visibility = View.GONE
 
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            breedImage.load(itemPhotoUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_baseline_image_24)
+                error(R.drawable.ic_baseline_hide_image_24)
+                scale(Scale.FILL)
+            }
+
+            root.setOnClickListener {
+                if (!item.isFavorite) favoriteMark.visibility = View.VISIBLE
+                else favoriteMark.visibility = View.GONE
+                onClick(item.breedPhoto)
+            }
         }
     }
+
+    override fun getItemCount(): Int = list.size
+
+    inner class ViewHolder(
+        val binding: FragmentBreedPhotoBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 
 }

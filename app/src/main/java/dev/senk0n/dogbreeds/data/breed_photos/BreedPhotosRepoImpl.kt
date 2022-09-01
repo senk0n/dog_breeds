@@ -6,7 +6,6 @@ import dev.senk0n.dogbreeds.data.breed_photos.shared.BreedPhotosRepository
 import dev.senk0n.dogbreeds.data.http_client.shared.HttpCallWrapper
 import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 

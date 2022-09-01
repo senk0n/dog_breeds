@@ -57,7 +57,8 @@ class BreedsFragment : Fragment() {
                     binding.breedsList.visibility = View.GONE
                     errorBinding.errorContainer.visibility = View.VISIBLE
                     errorBinding.errorImage.setImageResource(R.drawable.ic_baseline_error_outline_24)
-                    errorBinding.titleText.text = result.cause.message ?: getString(R.string.error_occurred)
+                    errorBinding.titleText.text =
+                        result.cause.message ?: getString(R.string.error_occurred)
                     binding.swipeRefresh.isRefreshing = false
                 }
             }

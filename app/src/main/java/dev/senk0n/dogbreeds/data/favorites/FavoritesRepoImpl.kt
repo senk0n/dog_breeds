@@ -13,6 +13,9 @@ import javax.inject.Singleton
 class FavoritesRepoImpl @Inject constructor(
     private val favoritesSource: FavoritesSource,
 ) : FavoritesRepository {
+    override suspend fun loadFavorites(): List<BreedPhoto> =
+        favoritesSource.getFavorites().map { it.toBreedPhoto() }
+
     override suspend fun loadFavoritesByBreed(breed: Breed): List<BreedPhoto> =
         if (breed.subBreed == null) {
             favoritesSource.getByBreed(breed.name)
