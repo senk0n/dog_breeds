@@ -44,7 +44,7 @@ class BreedPhotoViewModel @Inject constructor(
 
     fun toggleBreedFavorite(breedPhoto: BreedPhoto) = viewModelScope.launch {
         editFavoritesUseCase.toggleFavorite(breedPhoto)
-//        refresh()
+        refresh()
     }
 
     private fun loadPhotos(breed: Breed) =

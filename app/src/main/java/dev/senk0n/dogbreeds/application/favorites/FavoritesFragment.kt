@@ -38,22 +38,18 @@ class FavoritesFragment : Fragment() {
         viewModel.snack.observe(viewLifecycleOwner) { showSnack(it) }
         viewModel.favorites.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Pending -> {
-//                    binding.swipeRefresh.isRefreshing = true
-                }
+                is Pending -> {}
                 is Empty -> {
                     adapter.list = emptyList()
                     binding.favoritesList.visibility = View.GONE
                     errorBinding.errorContainer.visibility = View.VISIBLE
                     errorBinding.errorImage.setImageResource(R.drawable.ic_baseline_search_off_24)
                     errorBinding.titleText.text = getString(R.string.empty_result)
-//                    binding.swipeRefresh.isRefreshing = false
                 }
                 is Success -> {
                     adapter.list = result.value
                     errorBinding.errorContainer.visibility = View.GONE
                     binding.favoritesList.visibility = View.VISIBLE
-//                    binding.swipeRefresh.isRefreshing = false
                 }
                 is Error -> {
                     binding.favoritesList.visibility = View.GONE
@@ -61,7 +57,6 @@ class FavoritesFragment : Fragment() {
                     errorBinding.errorImage.setImageResource(R.drawable.ic_baseline_error_outline_24)
                     errorBinding.titleText.text =
                         result.cause.message ?: getString(R.string.error_occurred)
-//                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         }
@@ -74,7 +69,6 @@ class FavoritesFragment : Fragment() {
 
     private fun deleteFavorite(breedPhoto: BreedPhoto) {
         viewModel.deleteFavorite(breedPhoto)
-        viewModel.refresh()
     }
 
     override fun onDestroyView() {

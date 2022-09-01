@@ -58,16 +58,15 @@ class BreedPhotoAdapter(
             } else favoriteMark.visibility = View.GONE
 
             breedImage.load(itemPhotoUrl) {
-                crossfade(true)
                 placeholder(R.drawable.ic_baseline_image_24)
                 error(R.drawable.ic_baseline_hide_image_24)
                 scale(Scale.FILL)
             }
 
             root.setOnClickListener {
-                if (!item.isFavorite && !isFavorites) {
-                    favoriteMark.visibility = View.VISIBLE
-                } else favoriteMark.visibility = View.GONE
+                if (item.isFavorite) {
+                    favoriteMark.visibility = View.GONE
+                } else favoriteMark.visibility = View.VISIBLE
 
                 onClick(item.breedPhoto)
             }

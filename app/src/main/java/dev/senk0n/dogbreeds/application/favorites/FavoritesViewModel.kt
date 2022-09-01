@@ -53,7 +53,6 @@ class FavoritesViewModel @Inject constructor(
             _favorites.value = Error(throwable)
         }) {
             _favorites.value = Pending
-//            if (breed?.name?.isBlank() != true) _favorites.value = Empty
 
             var list: List<BreedPhoto>
             withContext(Dispatchers.Default) {
@@ -65,7 +64,7 @@ class FavoritesViewModel @Inject constructor(
             }
 
             if (list.isEmpty()) _favorites.value = Empty
-            _favorites.value = Success(list.map { BreedListItem(it, false) })
+            _favorites.value = Success(list.map { BreedListItem(it, true) })
         }
 
 }
