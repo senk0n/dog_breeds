@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
+import coil.transform.RoundedCornersTransformation
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoBinding
 import dev.senk0n.dogbreeds.shared.core.BreedListItem
@@ -46,11 +47,13 @@ class BreedPhotoAdapter(
 
         with(holder.binding) {
             if (isFavorites) {
-                breed.text = item.breedPhoto.breed.name
-                subBreed.text = item.breedPhoto.breed.subBreed ?: ""
+                val breedTxt = if (item.breedPhoto.breed.subBreed == null) {
+                    item.breedPhoto.breed.name
+                } else item.breedPhoto.breed.subBreed + " " + item.breedPhoto.breed.name
+
+                breed.text = breedTxt
             } else {
                 breed.visibility = View.GONE
-                subBreed.visibility = View.GONE
             }
 
             if (item.isFavorite && !isFavorites) {

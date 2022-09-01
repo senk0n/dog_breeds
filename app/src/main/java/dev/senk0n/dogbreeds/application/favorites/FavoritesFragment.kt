@@ -61,7 +61,7 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-        binding.favoritesList.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.favoritesList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.favoritesList.adapter = adapter
 
         return binding.root
