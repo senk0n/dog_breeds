@@ -1,12 +1,12 @@
 package dev.senk0n.dogbreeds.application.favorites
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.senk0n.dogbreeds.application.MutableLiveResult
 import dev.senk0n.dogbreeds.application.MutableLiveSnack
 import dev.senk0n.dogbreeds.application.public
-import dev.senk0n.dogbreeds.domain.breeds.shared.BreedsUseCase
 import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
@@ -20,33 +20,40 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val favoritesUseCase: FavoritesUseCase,
     private val editFavoritesUseCase: EditFavoritesUseCase,
-    private val breedsUseCase: BreedsUseCase,
 ) : ViewModel() {
 
     private val _favorites = MutableLiveResult<List<BreedListItem>>()
     val favorites = _favorites.public()
+    private val _breedsOfFavorites = MutableLiveData<List<Breed>>()
+    val breedsOfFavorites = _breedsOfFavorites.public()
     private val _snack = MutableLiveSnack()
     val snack = _snack.public()
 
     private var stateBreed: Breed? = null
 
     init {
-        loadFavorites(stateBreed)
+        refresh()
     }
 
-    fun setBreed(breed: Breed) {
+    fun setBreed(breed: Breed?) {
         stateBreed = breed
-        loadFavorites(stateBreed)
+        refresh()
     }
 
     fun refresh() {
         loadFavorites(stateBreed)
+        loadListOfBreeds()
     }
 
     fun deleteFavorite(breedPhoto: BreedPhoto) = viewModelScope.launch {
         editFavoritesUseCase.removeFavorite(breedPhoto)
         refresh()
     }
+
+    private fun loadListOfBreeds() = viewModelScope.launch {
+        _breedsOfFavorites.value = favoritesUseCase.getBreedsOfFavorites()
+    }
+
 
     private fun loadFavorites(breed: Breed?) =
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->

@@ -36,4 +36,7 @@ class FavoritesRepoImpl @Inject constructor(
     override suspend fun isFavorite(breedPhoto: BreedPhoto): Boolean =
         favoritesSource.isExistsByUrl(breedPhoto.photoUrl)
 
+    override suspend fun loadBreeds(): List<Breed> =
+        favoritesSource.getBreeds().map { Breed(it.breed, it.subBreed) }
+
 }

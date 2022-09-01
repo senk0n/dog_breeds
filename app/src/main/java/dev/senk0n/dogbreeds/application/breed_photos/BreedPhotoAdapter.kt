@@ -47,11 +47,7 @@ class BreedPhotoAdapter(
 
         with(holder.binding) {
             if (isFavorites) {
-                val breedTxt = if (item.breedPhoto.breed.subBreed == null) {
-                    item.breedPhoto.breed.name
-                } else item.breedPhoto.breed.subBreed + " " + item.breedPhoto.breed.name
-
-                breed.text = breedTxt
+                breed.text = item.breedPhoto.breed.toString()
             } else {
                 breed.visibility = View.GONE
             }

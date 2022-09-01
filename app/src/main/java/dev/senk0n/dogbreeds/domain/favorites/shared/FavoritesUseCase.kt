@@ -7,4 +7,6 @@ interface FavoritesUseCase {
     suspend fun getFavorites(): List<BreedPhoto>
 
     suspend fun getFavoritesByBreed(breed: Breed): List<BreedPhoto>
+
+    suspend fun getBreedsOfFavorites(): List<Breed>
 }

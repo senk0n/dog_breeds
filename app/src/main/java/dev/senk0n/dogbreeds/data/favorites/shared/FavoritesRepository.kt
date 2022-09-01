@@ -13,4 +13,6 @@ interface FavoritesRepository {
     suspend fun removeFavorite(breedPhoto: BreedPhoto)
 
     suspend fun isFavorite(breedPhoto: BreedPhoto): Boolean
+
+    suspend fun loadBreeds(): List<Breed>
 }

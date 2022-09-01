@@ -16,4 +16,14 @@
         tools:context=".application.favorites.FavoritesFragment"
         tools:listitem="@layout/fragment_breed_photo" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/filter_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/filter_breeds"
+        app:icon="@drawable/ic_baseline_manage_search_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

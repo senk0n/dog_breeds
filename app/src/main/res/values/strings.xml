@@ -11,4 +11,6 @@
     <string name="empty_result">Empty result</string>
     <string name="try_again_later">Try again later.</string>
     <string name="try_again">Try again</string>
+
+    <string name="filter_breeds">Filter breeds</string>
 </resources>

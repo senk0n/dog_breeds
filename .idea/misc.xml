@@ -21,12 +21,13 @@
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/DogBreeds/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2095" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/DogBreeds/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2095" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_breed_photo.xml" value="0.1" />
+        <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_breed_photo.xml" value="0.3875" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_breed_photo_list.xml" value="0.1" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_breeds.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_breeds_list.xml" value="0.29257246376811596" />
         <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_favorite.xml" value="0.29257246376811596" />
-        <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_favorites_list.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/fragment_favorites_list.xml" value="0.33" />
+        <entry key="..\:/Users/senk0n/AndroidStudioProjects/dog_breeds/app/src/main/res/layout/list_filter_breed_menu_item.xml" value="0.38645833333333335" />
       </map>
     </option>
   </component>

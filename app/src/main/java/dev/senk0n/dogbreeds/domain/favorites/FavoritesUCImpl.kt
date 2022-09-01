@@ -4,6 +4,7 @@ import dev.senk0n.dogbreeds.data.favorites.shared.FavoritesRepository
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,5 +18,9 @@ class FavoritesUCImpl @Inject constructor(
 
     override suspend fun getFavoritesByBreed(breed: Breed): List<BreedPhoto> {
         return favoritesRepository.loadFavoritesByBreed(breed)
+    }
+
+    override suspend fun getBreedsOfFavorites(): List<Breed>  {
+        return favoritesRepository.loadBreeds()
     }
 }

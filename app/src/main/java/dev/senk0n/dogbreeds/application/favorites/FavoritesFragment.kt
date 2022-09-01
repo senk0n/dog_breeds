@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.appcompat.widget.ListPopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -60,6 +62,7 @@ class FavoritesFragment : Fragment() {
                 }
             }
         }
+        binding.filterFab.setOnClickListener { it.showMenu() }
 
         binding.favoritesList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.favoritesList.adapter = adapter
@@ -69,6 +72,29 @@ class FavoritesFragment : Fragment() {
 
     private fun deleteFavorite(breedPhoto: BreedPhoto) {
         viewModel.deleteFavorite(breedPhoto)
+    }
+
+    private fun View.showMenu() {
+        val listPopupWindow = ListPopupWindow(
+            requireContext(), null,
+            com.google.android.material.R.attr.listPopupWindowStyle
+        )
+        listPopupWindow.anchorView = this
+        listPopupWindow.width = 500
+
+        viewModel.breedsOfFavorites.observe(viewLifecycleOwner) { listOfBreeds ->
+            val items: List<Breed> = listOfBreeds.toMutableList().apply { add(Breed("ALL")) }
+            val adapter =
+                ArrayAdapter(requireContext(), R.layout.list_filter_breed_menu_item, items)
+            listPopupWindow.setAdapter(adapter)
+
+            listPopupWindow.setOnItemClickListener { _, _, position, _ ->
+                val breed = if (items[position].name == "ALL") null else items[position]
+                viewModel.setBreed(breed)
+                listPopupWindow.dismiss()
+            }
+        }
+        listPopupWindow.show()
     }
 
     override fun onDestroyView() {
