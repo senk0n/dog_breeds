@@ -5,4 +5,6 @@ import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
 interface BreedPhotosRepository {
     suspend fun loadBreedPhotos(breed: Breed): List<BreedPhoto>
+
+    suspend fun loadRandomBreedPhoto(breed: Breed): BreedPhoto
 }

@@ -1,7 +1,7 @@
 package dev.senk0n.dogbreeds.domain.breeds.shared
 
-import dev.senk0n.dogbreeds.shared.core.Breed
+import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
 interface BreedsUseCase {
-    suspend fun getBreeds(): List<Breed>
+    suspend fun getBreeds(): List<BreedPhoto>
 }

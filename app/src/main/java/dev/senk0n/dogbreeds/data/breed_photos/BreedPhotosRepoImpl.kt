@@ -23,4 +23,13 @@ class BreedPhotosRepoImpl @Inject constructor(
         }
         response.toBreedPhotos()
     }
+
+    override suspend fun loadRandomBreedPhoto(breed: Breed): BreedPhoto = wrapCallExceptions {
+        val response = if (breed.subBreed != null) {
+            breedsPhotosSource.getOnePhotoBySubBreed(breed.name, breed.subBreed)
+        } else {
+            breedsPhotosSource.getOnePhotoByBreed(breed.name)
+        }
+        response.toBreedPhoto()
+    }
 }

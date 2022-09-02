@@ -16,7 +16,7 @@ import javax.inject.Inject
 class BreedsViewModel @Inject constructor(
     private val breedsUseCase: BreedsUseCase,
 ) : ViewModel() {
-    private val _breeds = MutableLiveResult<List<Breed>>(Pending)
+    private val _breeds = MutableLiveResult<List<BreedPhoto>>(Pending)
     val breeds = _breeds.public()
     private val _snack = MutableLiveSnack()
     val snack = _snack.public()
