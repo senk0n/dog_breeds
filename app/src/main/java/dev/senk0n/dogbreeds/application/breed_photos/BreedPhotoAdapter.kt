@@ -61,7 +61,7 @@ class BreedPhotoAdapter(
                 scale(Scale.FILL)
             }
 
-            root.setOnClickListener {
+            cardView.setOnClickListener {
                 if (item.isFavorite) {
                     favoriteMark.visibility = View.GONE
                 } else favoriteMark.visibility = View.VISIBLE
