@@ -51,9 +51,7 @@ class BreedPhotoAdapter(
                 breed.visibility = View.GONE
             }
 
-            if (item.isFavorite && !isFavorites) {
-                favoriteMark.visibility = View.VISIBLE
-            } else favoriteMark.visibility = View.GONE
+            cardView.isChecked = item.isFavorite && !isFavorites
 
             breedImage.load(itemPhotoUrl) {
                 placeholder(R.drawable.ic_baseline_image_24)
@@ -62,10 +60,7 @@ class BreedPhotoAdapter(
             }
 
             cardView.setOnClickListener {
-                if (item.isFavorite) {
-                    favoriteMark.visibility = View.GONE
-                } else favoriteMark.visibility = View.VISIBLE
-
+                cardView.isChecked = !item.isFavorite
                 onClick(item.breedPhoto)
             }
         }
