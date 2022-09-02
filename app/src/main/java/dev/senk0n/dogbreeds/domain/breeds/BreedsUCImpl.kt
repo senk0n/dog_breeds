@@ -3,6 +3,7 @@ package dev.senk0n.dogbreeds.domain.breeds
 import dev.senk0n.dogbreeds.data.breed_photos.shared.BreedPhotosRepository
 import dev.senk0n.dogbreeds.data.breeds.shared.BreedsRepository
 import dev.senk0n.dogbreeds.domain.breeds.shared.BreedsUseCase
+import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -23,6 +24,6 @@ class BreedsUCImpl @Inject constructor(
 
         breeds.map { breed ->
             async { breedPhotosRepository.loadRandomBreedPhoto(breed) }
-        }.map { it.await() }
+        }.map { it.await() } + BreedPhoto(Breed("meme"), "https://i.imgur.com/JIaB0GR.png")
     }
 }

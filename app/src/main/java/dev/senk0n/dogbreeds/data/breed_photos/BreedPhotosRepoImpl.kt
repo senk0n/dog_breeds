@@ -16,6 +16,12 @@ class BreedPhotosRepoImpl @Inject constructor(
 ) : HttpCallWrapper(moshi), BreedPhotosRepository {
 
     override suspend fun loadBreedPhotos(breed: Breed): List<BreedPhoto> = wrapCallExceptions {
+        if (breed.name == "meme") return@wrapCallExceptions buildList {
+            listOf(
+                "1mEiS9E", "n463u4a", "yd7oFj6", "1gHSL1D", "V3KX3Ww", "YTf254y", "vCRL9A8",
+                "iFJCzAa", "Xw1tynA", "98bEAHA", "9E5s3bu",
+            ).forEach { add(BreedPhoto(Breed("meme"), "https://i.imgur.com/$it.png")) }
+        }
         val response = if (breed.subBreed != null) {
             breedsPhotosSource.getPhotosBySubBreed(breed.name, breed.subBreed)
         } else {
