@@ -14,7 +14,7 @@ open class HttpCallWrapper(
 ) {
     private val adapter = moshi.adapter(ErrorResponse::class.java)
 
-    class ErrorResponse(val error: String)
+    class ErrorResponse(val message: String)
 
     suspend fun <T> wrapCallExceptions(block: suspend () -> T): T =
         try {
@@ -28,7 +28,7 @@ open class HttpCallWrapper(
                 val errorBody: ErrorResponse = adapter.fromJson(
                     ex.response()!!.errorBody()!!.string()
                 )!!
-                ServerException(ex.code().toShort(), errorBody.error)
+                ServerException(ex.code().toShort(), errorBody.message)
             } catch (ex: Exception) {
                 ParseResponseException(ex)
             }
