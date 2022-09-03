@@ -5,6 +5,7 @@ import dev.senk0n.dogbreeds.domain.breed_photos.shared.BreedPhotosUseCase
 import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
@@ -19,6 +20,13 @@ class BreedPhotosUCImpl @Inject constructor(
     override suspend fun loadPhotos(breed: Breed): List<BreedPhoto> =
         withContext(defaultDispatcher) {
             breedPhotosRepository.loadBreedPhotos(breed)
+        }
+
+    override suspend fun loadPhotos(breeds: List<Breed>): List<BreedPhoto> =
+        withContext(defaultDispatcher) {
+            breeds.map { breed ->
+                async { breedPhotosRepository.loadRandomBreedPhoto(breed) }
+            }.map { it.await() }
         }
 
 }

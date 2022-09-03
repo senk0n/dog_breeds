@@ -5,4 +5,6 @@ import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
 interface BreedPhotosUseCase {
     suspend fun loadPhotos(breed: Breed): List<BreedPhoto>
+
+    suspend fun loadPhotos(breeds: List<Breed>): List<BreedPhoto>
 }
