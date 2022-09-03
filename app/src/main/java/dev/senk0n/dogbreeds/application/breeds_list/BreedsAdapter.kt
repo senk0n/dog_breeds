@@ -51,12 +51,13 @@ class BreedsAdapter(
                 subBreed.visibility = View.GONE
             }
 
-            breedImage.load(item.photoUrl) {
-                placeholder(R.drawable.ic_baseline_image_24)
-                error(R.drawable.ic_baseline_hide_image_24)
-                transformations(CircleCropTransformation())
-                scale(Scale.FILL)
-            }
+            if (item.photoUrl.isNotBlank())
+                breedImage.load(item.photoUrl) {
+                    placeholder(R.drawable.ic_baseline_image_24)
+                    error(R.drawable.ic_baseline_hide_image_24)
+                    transformations(CircleCropTransformation())
+                    scale(Scale.FILL)
+                }
 
             root.setOnClickListener { onClick(Breed(item.breed.name, item.breed.subBreed)) }
         }
