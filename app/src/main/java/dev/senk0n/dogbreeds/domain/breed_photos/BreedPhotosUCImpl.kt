@@ -6,6 +6,7 @@ import dev.senk0n.dogbreeds.shared.core.Breed
 import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
@@ -26,7 +27,7 @@ class BreedPhotosUCImpl @Inject constructor(
         withContext(defaultDispatcher) {
             breeds.map { breed ->
                 async { breedPhotosRepository.loadRandomBreedPhoto(breed) }
-            }.map { it.await() }
+            }.awaitAll()
         }
 
 }
