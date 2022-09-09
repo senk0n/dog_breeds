@@ -4,7 +4,7 @@
     // Bottom navigation
     <string name="breeds_tab">Breeds</string>
     <string name="favorites_tab">Favorites</string>
-    <string name="breed_photos_tab">Breed Photos</string>
+    <string name="breed_photos_tab">Photos of {SUB_BREED} {BREED}</string>
 
     // Error container
     <string name="error_occurred">Error occurred</string>
