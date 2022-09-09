@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
@@ -15,33 +16,10 @@ import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 
 class BreedsAdapter(
     private val onClick: (breed: Breed) -> Unit,
-) : RecyclerView.Adapter<BreedsAdapter.ViewHolder>() {
-    var list: List<BreedPhoto> = emptyList()
-        set(value) {
-            val diffCallback = object : DiffUtil.Callback() {
-                override fun getOldListSize(): Int = field.size
-                override fun getNewListSize(): Int = value.size
-                override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean =
-                    field[oldItem].breed.name == value[newItem].breed.name
-
-                override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean =
-                    field[oldItem] == value[newItem]
-            }
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            FragmentBreedsBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
-    }
+) : ListAdapter<BreedPhoto, BreedsAdapter.ViewHolder>(ItemCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
+        val item = getItem(position)
         with(holder.binding) {
             breed.text = item.breed.name
             subBreed.text = item.breed.subBreed
@@ -63,10 +41,23 @@ class BreedsAdapter(
         }
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            FragmentBreedsBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
+    }
 
     inner class ViewHolder(
         val binding: FragmentBreedsBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
+    object ItemCallback : DiffUtil.ItemCallback<BreedPhoto>() {
+        override fun areItemsTheSame(oldItem: BreedPhoto, newItem: BreedPhoto): Boolean =
+            oldItem.breed.name == newItem.breed.name
+
+        override fun areContentsTheSame(oldItem: BreedPhoto, newItem: BreedPhoto): Boolean =
+            oldItem == newItem
+    }
 }

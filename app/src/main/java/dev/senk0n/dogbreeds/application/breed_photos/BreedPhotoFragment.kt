@@ -63,7 +63,7 @@ class BreedPhotoFragment : Fragment() {
                     binding.swipeRefresh.isRefreshing = true
                 }
                 is Empty -> {
-                    adapter.list = emptyList()
+                    adapter.submitList(emptyList())
                     binding.breedPhotoList.visibility = View.GONE
                     errorBinding.errorContainer.visibility = View.VISIBLE
                     errorBinding.errorImage.setImageResource(R.drawable.ic_baseline_search_off_24)
@@ -71,7 +71,7 @@ class BreedPhotoFragment : Fragment() {
                     binding.swipeRefresh.isRefreshing = false
                 }
                 is Success -> {
-                    adapter.list = result.value
+                    adapter.submitList(result.value)
                     errorBinding.errorContainer.visibility = View.GONE
                     binding.breedPhotoList.visibility = View.VISIBLE
                     binding.swipeRefresh.isRefreshing = false

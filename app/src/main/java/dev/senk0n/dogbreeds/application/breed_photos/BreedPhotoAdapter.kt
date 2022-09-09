@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
@@ -15,22 +16,7 @@ import dev.senk0n.dogbreeds.shared.core.BreedPhoto
 class BreedPhotoAdapter(
     private val isFavorites: Boolean,
     private val onClick: (breedPhoto: BreedPhoto) -> Unit,
-) : RecyclerView.Adapter<BreedPhotoAdapter.ViewHolder>() {
-    var list: List<BreedListItem> = emptyList()
-        set(value) {
-            val diffCallback = object : DiffUtil.Callback() {
-                override fun getOldListSize(): Int = field.size
-                override fun getNewListSize(): Int = value.size
-                override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean =
-                    field[oldItem].breedPhoto.photoUrl == value[newItem].breedPhoto.photoUrl
-
-                override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean =
-                    field[oldItem] == value[newItem]
-            }
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
+) : ListAdapter<BreedListItem, BreedPhotoAdapter.ViewHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -41,7 +27,7 @@ class BreedPhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
+        val item = getItem(position)
         val itemPhotoUrl = item.breedPhoto.photoUrl
 
         with(holder.binding) {
@@ -66,10 +52,15 @@ class BreedPhotoAdapter(
         }
     }
 
-    override fun getItemCount(): Int = list.size
-
     inner class ViewHolder(
         val binding: FragmentBreedPhotoBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
+    object ItemCallback : DiffUtil.ItemCallback<BreedListItem>() {
+        override fun areItemsTheSame(oldItem: BreedListItem, newItem: BreedListItem): Boolean =
+            oldItem.breedPhoto.photoUrl == newItem.breedPhoto.photoUrl
+
+        override fun areContentsTheSame(oldItem: BreedListItem, newItem: BreedListItem): Boolean =
+            oldItem == newItem
+    }
 }

@@ -42,14 +42,14 @@ class FavoritesFragment : Fragment() {
             when (result) {
                 is Pending -> {}
                 is Empty -> {
-                    adapter.list = emptyList()
+                    adapter.submitList(emptyList())
                     binding.favoritesList.visibility = View.GONE
                     errorBinding.errorContainer.visibility = View.VISIBLE
                     errorBinding.errorImage.setImageResource(R.drawable.ic_baseline_search_off_24)
                     errorBinding.titleText.text = getString(R.string.empty_result)
                 }
                 is Success -> {
-                    adapter.list = result.value
+                    adapter.submitList(result.value)
                     errorBinding.errorContainer.visibility = View.GONE
                     binding.favoritesList.visibility = View.VISIBLE
                 }
