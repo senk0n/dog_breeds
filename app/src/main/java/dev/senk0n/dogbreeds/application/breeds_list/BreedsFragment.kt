@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.application.breed_photos.BreedPhotoFragment.Companion.ARG_BREED
 import dev.senk0n.dogbreeds.application.breed_photos.BreedPhotoFragment.Companion.ARG_SUB_BREED
-import dev.senk0n.dogbreeds.application.showSnack
+import dev.senk0n.dogbreeds.application.shared.showSnack
 import dev.senk0n.dogbreeds.databinding.FragmentBreedsListBinding
 import dev.senk0n.dogbreeds.databinding.PartErrorBinding
 import dev.senk0n.dogbreeds.shared.core.*

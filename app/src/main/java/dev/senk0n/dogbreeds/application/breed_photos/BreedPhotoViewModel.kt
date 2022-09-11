@@ -3,9 +3,10 @@ package dev.senk0n.dogbreeds.application.breed_photos
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.senk0n.dogbreeds.application.MutableLiveResult
-import dev.senk0n.dogbreeds.application.MutableLiveSnack
-import dev.senk0n.dogbreeds.application.public
+import dev.senk0n.dogbreeds.application.shared.LiveResult
+import dev.senk0n.dogbreeds.application.shared.LiveSnack
+import dev.senk0n.dogbreeds.application.shared.MutableLiveResult
+import dev.senk0n.dogbreeds.application.shared.MutableLiveSnack
 import dev.senk0n.dogbreeds.domain.breed_photos.shared.BreedPhotosUseCase
 import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
@@ -22,38 +23,39 @@ class BreedPhotoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _breedPhotos = MutableLiveResult<List<BreedListItem>>()
-    val breedPhotos = _breedPhotos.public()
+    val breedPhotos: LiveResult<List<BreedListItem>> = _breedPhotos
     private val _snack = MutableLiveSnack()
-    val snack = _snack.public()
+    val snack: LiveSnack = _snack
 
     private var _stateBreed: Breed? = null
     private val stateBreed: Breed get() = _stateBreed!!
 
     fun setBreed(breed: Breed) {
         _stateBreed = breed
-        loadPhotos(stateBreed)
+        load()
     }
 
     fun refresh() {
-        if (_stateBreed != null) {
-            loadPhotos(stateBreed)
-        } else _breedPhotos.value = Empty
+        _breedPhotos.value = Pending
+        load()
     }
 
     fun toggleBreedFavorite(breedPhoto: BreedPhoto) = viewModelScope.launch {
         editFavoritesUseCase.toggleFavorite(breedPhoto)
-        refresh()
+        load()
     }
 
-    private fun loadPhotos(breed: Breed) =
+    private fun load() =
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
             _breedPhotos.value = Error(throwable)
         }) {
-            _breedPhotos.value = Pending
-            if (breed.name.isBlank()) _breedPhotos.value = Empty
+            if (_stateBreed == null || stateBreed.name.isBlank()) {
+                _breedPhotos.value = Empty
+                return@launch
+            }
 
-            val list = breedPhotosUseCase.loadPhotos(breed)
-            val favorites = favoritesUseCase.getFavoritesByBreed(breed)
+            val list = breedPhotosUseCase.loadPhotos(stateBreed)
+            val favorites = favoritesUseCase.getFavoritesByBreed(stateBreed)
 
             if (list.isEmpty()) _breedPhotos.value = Empty
             _breedPhotos.value = Success(list.map {

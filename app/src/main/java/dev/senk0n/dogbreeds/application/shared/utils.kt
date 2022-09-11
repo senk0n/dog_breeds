@@ -1,4 +1,4 @@
-package dev.senk0n.dogbreeds.application
+package dev.senk0n.dogbreeds.application.shared
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -19,8 +19,6 @@ typealias MediatorLiveResult<T> = MediatorLiveData<ResultState<T>>
 typealias LiveEvent<T> = LiveData<Event<T>>
 typealias MutableLiveEvent<T> = MutableLiveData<Event<T>>
 
-fun <T> MutableLiveData<T>.public(): LiveData<T> = this
-
 fun <T> LiveEvent<T>.observe(owner: LifecycleOwner, observer: T.() -> Unit) {
     this.observe(owner) { event ->
         event?.valueOrNull?.let { value ->
@@ -32,7 +30,6 @@ fun <T> LiveEvent<T>.observe(owner: LifecycleOwner, observer: T.() -> Unit) {
 // SnackBar
 class Snack(val message: String, val actionMsg: String? = null, val action: (() -> Unit)? = null)
 typealias LiveSnack = LiveEvent<Snack>
-
 typealias MutableLiveSnack = MutableLiveEvent<Snack>
 
 fun Fragment.showSnack(snack: Event<Snack>) {

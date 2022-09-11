@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
-import dev.senk0n.dogbreeds.application.showSnack
+import dev.senk0n.dogbreeds.application.shared.showSnack
 import dev.senk0n.dogbreeds.databinding.FragmentBreedPhotoListBinding
 import dev.senk0n.dogbreeds.databinding.PartErrorBinding
 import dev.senk0n.dogbreeds.shared.core.*
@@ -91,6 +92,10 @@ class BreedPhotoFragment : Fragment() {
 
         binding.breedPhotoList.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.breedPhotoList.adapter = adapter
+        val itemAnimator = binding.breedPhotoList.itemAnimator
+        if (itemAnimator is DefaultItemAnimator) {
+            itemAnimator.supportsChangeAnimations = false
+        }
 
         return binding.root
     }

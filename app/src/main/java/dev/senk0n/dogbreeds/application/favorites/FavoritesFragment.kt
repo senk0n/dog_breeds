@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.senk0n.dogbreeds.R
 import dev.senk0n.dogbreeds.application.breed_photos.BreedPhotoAdapter
-import dev.senk0n.dogbreeds.application.showSnack
+import dev.senk0n.dogbreeds.application.shared.showSnack
 import dev.senk0n.dogbreeds.databinding.FragmentFavoritesListBinding
 import dev.senk0n.dogbreeds.databinding.PartErrorBinding
 import dev.senk0n.dogbreeds.shared.core.*

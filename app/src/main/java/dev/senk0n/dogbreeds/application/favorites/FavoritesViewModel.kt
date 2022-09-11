@@ -1,12 +1,14 @@
 package dev.senk0n.dogbreeds.application.favorites
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.senk0n.dogbreeds.application.MutableLiveResult
-import dev.senk0n.dogbreeds.application.MutableLiveSnack
-import dev.senk0n.dogbreeds.application.public
+import dev.senk0n.dogbreeds.application.shared.LiveResult
+import dev.senk0n.dogbreeds.application.shared.LiveSnack
+import dev.senk0n.dogbreeds.application.shared.MutableLiveResult
+import dev.senk0n.dogbreeds.application.shared.MutableLiveSnack
 import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
@@ -21,11 +23,11 @@ class FavoritesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _favorites = MutableLiveResult<List<BreedListItem>>()
-    val favorites = _favorites.public()
+    val favorites: LiveResult<List<BreedListItem>> = _favorites
     private val _breedsOfFavorites = MutableLiveData<List<Breed>>()
-    val breedsOfFavorites = _breedsOfFavorites.public()
+    val breedsOfFavorites: LiveData<List<Breed>> = _breedsOfFavorites
     private val _snack = MutableLiveSnack()
-    val snack = _snack.public()
+    val snack: LiveSnack = _snack
 
     private var stateBreed: Breed? = null
 
