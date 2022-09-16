@@ -1,47 +1,36 @@
 package dev.senk0n.dogbreeds.application.breeds_list
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.senk0n.dogbreeds.application.*
-import dev.senk0n.dogbreeds.application.shared.LiveResult
-import dev.senk0n.dogbreeds.application.shared.LiveSnack
-import dev.senk0n.dogbreeds.application.shared.MutableLiveResult
-import dev.senk0n.dogbreeds.application.shared.MutableLiveSnack
+import dev.senk0n.dogbreeds.application.shared.StateViewModel
 import dev.senk0n.dogbreeds.domain.breed_photos.shared.BreedPhotosUseCase
 import dev.senk0n.dogbreeds.domain.breeds.shared.BreedsUseCase
 import dev.senk0n.dogbreeds.shared.core.*
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class BreedsViewModel @Inject constructor(
     private val breedsUseCase: BreedsUseCase,
     private val breedPhotosUseCase: BreedPhotosUseCase,
-) : ViewModel() {
-    private val _breeds = MutableLiveResult<List<BreedPhoto>>(Pending)
-    val breeds: LiveResult<List<BreedPhoto>> = _breeds
-    private val _snack = MutableLiveSnack()
-    val snack: LiveSnack = _snack
+) : StateViewModel<List<BreedPhoto>>() {
 
     init {
-        loadBreeds()
+        refresh()
     }
 
-    fun loadBreeds() {
-        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            _breeds.value = Error(throwable)
-        }) {
-            _breeds.value = Pending
+    override fun refresh(): Job {
+        mutableState.value = Pending
+        return super.refresh()
+    }
 
-            val breeds = breedsUseCase.getBreeds()
-            if (breeds.isEmpty()) {
-                _breeds.value = Empty
-            } else {
-                _breeds.value = Success(breeds.map { BreedPhoto(it, "") })
-                _breeds.value = Success(breedPhotosUseCase.loadPhotos(breeds))
-            }
+    override suspend fun MutableStateFlow<ResultState<List<BreedPhoto>>>.load() {
+        val breeds = breedsUseCase.getBreeds()
+        if (breeds.isEmpty()) {
+            value = Empty
+        } else {
+            value = Success(breeds.map { BreedPhoto(it, "") })
+            value = Success(breedPhotosUseCase.loadPhotos(breeds))
         }
     }
 
