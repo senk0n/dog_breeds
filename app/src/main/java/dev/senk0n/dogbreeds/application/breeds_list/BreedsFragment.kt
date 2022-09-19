@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +68,10 @@ class BreedsFragment : BaseFragment() {
 
         binding.breedsList.layoutManager = LinearLayoutManager(requireContext())
         binding.breedsList.adapter = adapter
+        val itemAnimator = binding.breedsList.itemAnimator
+        if (itemAnimator is DefaultItemAnimator) {
+            itemAnimator.supportsChangeAnimations = false
+        }
 
         with(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)) {
             isLastItemDecorated = false

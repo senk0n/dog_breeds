@@ -28,10 +28,16 @@ class BreedsViewModel @Inject constructor(
         val breeds = breedsUseCase.getBreeds()
         if (breeds.isEmpty()) {
             value = Empty
-        } else {
-            value = Success(breeds.map { BreedPhoto(it, "") })
-            value = Success(breedPhotosUseCase.loadPhotos(breeds))
+            return
         }
+
+        value = Success(breeds.map { BreedPhoto(it, "") })
+        breedPhotosUseCase.loadPhotos(breeds).collect { photo ->
+            val oldList = value.valueOrNull ?: emptyList()
+            val newList = oldList.map { if (it.breed == photo.breed) photo else it }
+            value = Success(newList)
+        }
+
     }
 
 }

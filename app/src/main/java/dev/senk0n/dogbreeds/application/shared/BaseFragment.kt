@@ -25,6 +25,7 @@ abstract class BaseFragment : Fragment {
     ): View? {
         activityBinding = (requireActivity() as MainActivity).binding
         _errorBinding = PartErrorBinding.bind(activityBinding.root)
+        activityBinding.swipeRefresh.isEnabled = true
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 

@@ -34,15 +34,21 @@ class BreedPhotoViewModel @Inject constructor(
     override suspend fun MutableStateFlow<ResultState<List<BreedListItem>>>.load() {
         if (_stateBreed == null || stateBreed.name.isBlank()) {
             value = Empty
+            return
+        }
+        var list = value.valueOrNull?.map { it.breedPhoto } ?: emptyList()
+
+        if (list.isEmpty()) {
+            list = breedPhotosUseCase.loadPhotos(stateBreed)
+        }
+        if (list.isEmpty()) {
+            value = Empty
+            return
         }
 
-        val list = breedPhotosUseCase.loadPhotos(stateBreed)
         val favorites = favoritesUseCase.getFavoritesByBreed(stateBreed)
-
-        if (list.isEmpty()) value = Empty
-        value = Success(list.map {
-            BreedListItem(it, favorites.contains(it))
-        })
+        val newList = list.map { BreedListItem(it, it in favorites) }
+        value = Success(newList)
     }
 
 }
