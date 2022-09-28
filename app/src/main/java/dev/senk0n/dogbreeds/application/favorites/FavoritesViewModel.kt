@@ -1,5 +1,6 @@
 package dev.senk0n.dogbreeds.application.favorites
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.senk0n.dogbreeds.application.shared.StateViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val favoritesUseCase: FavoritesUseCase,
     private val editFavoritesUseCase: EditFavoritesUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : StateViewModel<List<BreedListItem>>() {
 
     private val _breedsOfFavorites = MutableStateFlow<List<Breed>>(emptyList())
@@ -24,12 +26,18 @@ class FavoritesViewModel @Inject constructor(
     private var stateBreed: Breed? = null
 
     init {
-        refresh()
+        val breed: String? = savedStateHandle["breed"]
+        val subBreed: String? = savedStateHandle["subBreed"]
+        if (breed != null) {
+            setBreed(Breed(breed, subBreed))
+        } else refresh()
     }
 
     fun setBreed(breed: Breed?) {
         stateBreed = breed
         refresh()
+        savedStateHandle["breed"] = stateBreed?.name
+        savedStateHandle["subBreed"] = stateBreed?.subBreed
     }
 
     override fun refresh(): Job {
