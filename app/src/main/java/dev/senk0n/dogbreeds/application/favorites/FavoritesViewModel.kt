@@ -1,18 +1,15 @@
 package dev.senk0n.dogbreeds.application.favorites
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.senk0n.dogbreeds.application.shared.LiveResult
-import dev.senk0n.dogbreeds.application.shared.LiveSnack
-import dev.senk0n.dogbreeds.application.shared.MutableLiveResult
-import dev.senk0n.dogbreeds.application.shared.MutableLiveSnack
+import dev.senk0n.dogbreeds.application.shared.StateViewModel
 import dev.senk0n.dogbreeds.domain.edit_favorites.shared.EditFavoritesUseCase
 import dev.senk0n.dogbreeds.domain.favorites.shared.FavoritesUseCase
 import dev.senk0n.dogbreeds.shared.core.*
-import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,29 +17,32 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val favoritesUseCase: FavoritesUseCase,
     private val editFavoritesUseCase: EditFavoritesUseCase,
-) : ViewModel() {
+    private val savedStateHandle: SavedStateHandle,
+) : StateViewModel<List<BreedListItem>>() {
 
-    private val _favorites = MutableLiveResult<List<BreedListItem>>()
-    val favorites: LiveResult<List<BreedListItem>> = _favorites
-    private val _breedsOfFavorites = MutableLiveData<List<Breed>>()
-    val breedsOfFavorites: LiveData<List<Breed>> = _breedsOfFavorites
-    private val _snack = MutableLiveSnack()
-    val snack: LiveSnack = _snack
+    private val _breedsOfFavorites = MutableStateFlow<List<Breed>>(emptyList())
+    val breedsOfFavorites = _breedsOfFavorites.asStateFlow()
 
     private var stateBreed: Breed? = null
 
     init {
-        refresh()
+        val breed: String? = savedStateHandle["breed"]
+        val subBreed: String? = savedStateHandle["subBreed"]
+        if (breed != null) {
+            setBreed(Breed(breed, subBreed))
+        } else refresh()
     }
 
     fun setBreed(breed: Breed?) {
         stateBreed = breed
         refresh()
+        savedStateHandle["breed"] = stateBreed?.name
+        savedStateHandle["subBreed"] = stateBreed?.subBreed
     }
 
-    fun refresh() {
-        loadFavorites(stateBreed)
+    override fun refresh(): Job {
         loadListOfBreeds()
+        return super.refresh()
     }
 
     fun deleteFavorite(breedPhoto: BreedPhoto) = viewModelScope.launch {
@@ -54,20 +54,17 @@ class FavoritesViewModel @Inject constructor(
         _breedsOfFavorites.value = favoritesUseCase.getBreedsOfFavorites()
     }
 
-    private fun loadFavorites(breed: Breed?) =
-        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            _favorites.value = Error(throwable)
-        }) {
-            _favorites.value = Pending
+    override suspend fun MutableStateFlow<ResultState<List<BreedListItem>>>.load() {
+        val breed = stateBreed
 
-            val list = if (breed == null) {
-                favoritesUseCase.getFavorites()
-            } else {
-                favoritesUseCase.getFavoritesByBreed(breed)
-            }
-
-            if (list.isEmpty()) _favorites.value = Empty
-            _favorites.value = Success(list.map { BreedListItem(it, true) })
+        val list = if (breed == null) {
+            favoritesUseCase.getFavorites()
+        } else {
+            favoritesUseCase.getFavoritesByBreed(breed)
         }
+
+        if (list.isEmpty()) value = Empty
+        value = Success(list.map { BreedListItem(it, true) })
+    }
 
 }

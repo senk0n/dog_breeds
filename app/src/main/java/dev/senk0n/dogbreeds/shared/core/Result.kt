@@ -17,7 +17,7 @@ sealed interface ResultState<out T> {
 
     val valueOrNull: T? get() = if (this is Success) this.value else null
 
-    val isFinished: Boolean get() = this is Success || this is Error
+    val isFinished: Boolean get() = this is Result
 }
 
 object Pending : ResultState<Nothing>
@@ -28,4 +28,4 @@ sealed interface Result<T> : ResultState<T>
 
 class Success<T>(val value: T) : Result<T>
 
-class Error<T>(val cause: Throwable) : Result<T>
+class Error(val cause: Throwable) : Result<Nothing>
