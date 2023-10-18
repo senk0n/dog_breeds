@@ -21,7 +21,7 @@ Android application based on dog.ceo API with local favorites
 ### Developing stack
 - Kotlin
 - Kotlin Coroutines
-- LiveData
+- Kotlin Flow
 - XML based layout
 - Retrofit
 - Moshi

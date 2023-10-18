@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/part_error" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorites_list"
         android:name="dev.senk0n.dogbreeds.ui.favorites.FavoritesFragment"

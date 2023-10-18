@@ -11,3 +11,5 @@ class ParseResponseException(
 ) : AppException("Server's response can't be handled", cause)
 
 open class ServerException(val code: Short, message: String) : AppException(message)
+
+class EmptyStateException : AppException()
